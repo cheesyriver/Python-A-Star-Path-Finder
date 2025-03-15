@@ -24,7 +24,7 @@ class Node:
         self.x = row * width
         self.y = col * width
         self.color = WHITE
-        self.neightbours = []
+        self.neighbours = []
         self.width = width
         self.total_rows = total_rows
 
@@ -110,3 +110,59 @@ def draw(win, grid, rows, width):
 
     draw_grid(win, rows, width)
     pygame.display.update()
+
+def get_clicked_pos(pos, rows, width):
+    gap = width // rows
+    y, x = pos
+    
+    row = y // gap
+    col = x // gap
+    
+    return row, col
+
+def main(win, width):
+    ROWS = 50
+    grid = make_grid(ROWS, width)
+
+    start = None
+    end = None
+
+    run = True
+    started = False
+    while run:
+        draw(win, grid, ROWS, width)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                break
+            
+            if started:
+                continue
+
+            if pygame.mouse.get_pressed()[0]:
+                pos = pygame.mouse.get_pos()
+                row, col = get_clicked_pos(pos, ROWS, width)
+                node = grid[row][col]
+
+                if not start and node != end:
+                    start = node
+                    start.set_start()
+                elif not end and node != start:
+                    end = node
+                    end.set_end()
+                elif node != end and node != start and start and end:
+                    node.set_wall()
+            
+            elif pygame.mouse.get_pressed()[2]:
+                pos = pygame.mouse.get_pos()
+                row, col = get_clicked_pos(pos, ROWS, width)
+                node = grid[row][col]
+                node.reset()
+
+                if node == start:
+                    start = None
+                elif node == end:
+                    end = None
+    
+    pygame.quit()
+main(WIN, WIN_WIDTH)
