@@ -179,6 +179,15 @@ def get_clicked_pos(pos, rows, width):
     
     row = y // gap
     col = x // gap
+
+    if row < 0:
+        row = 0
+    if row >= rows:
+        row = rows - 1
+    if col < 0:
+        col = 0
+    if col >= rows:
+        col = rows - 1
     
     return row, col
 
