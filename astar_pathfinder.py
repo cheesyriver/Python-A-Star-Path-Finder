@@ -120,7 +120,7 @@ def algorithm(draw, grid, start, end):
 
 		if current == end:
 			recreate_path(came_from, end, draw)
-			end.make_end()
+			end.set_end()
 			return True
 
 		for neighbour in current.neighbours:
